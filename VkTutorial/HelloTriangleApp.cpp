@@ -176,7 +176,7 @@ void HelloTriangleApp::createInstance()
 	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 	appInfo.pEngineName = "No Engine";
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.apiVersion = VK_API_VERSION_1_0;
+	appInfo.apiVersion = VK_API_VERSION_1_2;
 
 	VkInstanceCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -213,11 +213,54 @@ void HelloTriangleApp::initVulkan()
 	createInstance();
 	setupDebugMessenger();
 	pickPhysicalDevice();
+	createLogicalDevice();
+}
+
+void HelloTriangleApp::createLogicalDevice()
+{
+	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+
+	VkDeviceQueueCreateInfo queueCreateInfo = {};
+	queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+	queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+	queueCreateInfo.queueCount = 1;
+
+	float queuePriority = 1.0f;
+	queueCreateInfo.pQueuePriorities = &queuePriority;
+
+	VkPhysicalDeviceFeatures deviceFeatures = {};
+
+	VkDeviceCreateInfo createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	
+	createInfo.pQueueCreateInfos = &queueCreateInfo;
+	createInfo.queueCreateInfoCount = 1;
+	
+	createInfo.pEnabledFeatures = &deviceFeatures;
+
+	createInfo.enabledExtensionCount = 0;
+
+	if (enableValidationLayers)
+	{
+		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+		createInfo.ppEnabledLayerNames = validationLayers.data();
+	}
+	else
+	{
+		createInfo.enabledLayerCount = 0;
+	}
+
+	if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
+	{
+		throw std::runtime_error("failed to create logical device!");
+	}
+
+	vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
 }
 
 void HelloTriangleApp::pickPhysicalDevice()
 {
-	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+	physicalDevice = VK_NULL_HANDLE;
 
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -341,6 +384,8 @@ void HelloTriangleApp::mainLoop()
 
 void HelloTriangleApp::cleanup()
 {
+	vkDestroyDevice(device, nullptr);
+
 	if (enableValidationLayers)
 	{
 		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
