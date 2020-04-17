@@ -13,6 +13,7 @@ private:
 	GLFWwindow* window;
 
 	VkInstance instance;
+	VkDebugUtilsMessengerEXT debugMessenger;
 
 	const std::vector<const char*> validationLayers =
 	{
@@ -33,7 +34,17 @@ public:
 
 private:
 
+	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+		VkDebugUtilsMessageTypeFlagsEXT messageType,
+		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+		void* pUserData);
+
+	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
+	void setupDebugMessenger();
+
 	void initWindow();
+	std::vector<const char*> getRequiredExtensions();
 	void checkExtensions(const char** used_extensions, uint32_t count);
 	bool checkValidationLayerSupport();
 	void createInstance();
