@@ -4,10 +4,11 @@
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphicsFamily;
+	std::optional<uint32_t> presentFamily;
 
 	bool isComplete()
 	{
-		return graphicsFamily.has_value();
+		return graphicsFamily.has_value() && presentFamily.has_value();
 	}
 };
 
@@ -26,6 +27,8 @@ private:
 	VkPhysicalDevice physicalDevice;
 	VkDevice device;
 	VkQueue graphicsQueue;
+	VkQueue presentQueue;
+	VkSurfaceKHR surface;
 	VkDebugUtilsMessengerEXT debugMessenger;
 
 	const std::vector<const char*> validationLayers =
@@ -46,18 +49,19 @@ public:
 
 private:
 
+	void mainLoop();
+
 	void initWindow();
-
 	void initVulkan();
-
-	
-
+	void createInstance();
+	void setupDebugMessenger();
+	void createSurface();
 	void pickPhysicalDevice();
+	void createLogicalDevice();
+
 	bool isDeviceSuitable(VkPhysicalDevice device);
 	int rateDeviceSuitability(VkPhysicalDevice device);
 	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
-
-	void createLogicalDevice();
 
 	void checkExtensions(const char** used_extensions, uint32_t count);
 	std::vector<const char*> getRequiredExtensions();
@@ -69,11 +73,8 @@ private:
 		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		void* pUserData);
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-	void setupDebugMessenger();
 
-	void createInstance();
+
 	void cleanup();
-
-	void mainLoop();
 };
 
