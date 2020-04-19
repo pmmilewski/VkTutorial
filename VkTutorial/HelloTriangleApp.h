@@ -38,6 +38,7 @@ private:
 	VkSurfaceKHR surface;
 	VkSwapchainKHR swapChain;
 	std::vector<VkImage> swapChainImages;
+	std::vector<VkImageView> swapChainImageViews;
 	VkFormat swapChainImageFormat;
 	VkExtent2D swapChainExtent;
 	VkDebugUtilsMessengerEXT debugMessenger;
@@ -85,6 +86,7 @@ private:
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 	void createSwapChain();
+	void createImageViews();
 
 	void checkExtensions(const char** used_extensions, uint32_t count);
 	std::vector<const char*> getRequiredExtensions();
