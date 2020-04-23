@@ -99,6 +99,9 @@ private:
 		void* pUserData);
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 
+	VkShaderModule createShaderModule(const std::vector<char>& code);
+	void createGraphicsPipeline();
+
 
 	void cleanup();
 };
