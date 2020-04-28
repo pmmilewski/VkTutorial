@@ -36,6 +36,7 @@ private:
 	VkQueue graphicsQueue;
 	VkQueue presentQueue;
 	VkSurfaceKHR surface;
+	VkRenderPass renderPass;
 	VkPipelineLayout pipelineLayout;
 	VkSwapchainKHR swapChain;
 	std::vector<VkImage> swapChainImages;
@@ -103,6 +104,7 @@ private:
 	VkShaderModule createShaderModule(const std::vector<char>& code);
 	void createGraphicsPipeline();
 
+	void createRenderPass();
 
 	void cleanup();
 };
