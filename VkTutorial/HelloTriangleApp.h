@@ -42,6 +42,7 @@ private:
 	VkSwapchainKHR swapChain;
 	std::vector<VkImage> swapChainImages;
 	std::vector<VkImageView> swapChainImageViews;
+	std::vector<VkFramebuffer> swapChainFramebuffers;
 	VkFormat swapChainImageFormat;
 	VkExtent2D swapChainExtent;
 	VkDebugUtilsMessengerEXT debugMessenger;
@@ -106,6 +107,8 @@ private:
 	void createGraphicsPipeline();
 
 	void createRenderPass();
+
+	void createFramebuffers();
 
 	void cleanup();
 };
