@@ -43,6 +43,8 @@ private:
 	std::vector<VkImage> swapChainImages;
 	std::vector<VkImageView> swapChainImageViews;
 	std::vector<VkFramebuffer> swapChainFramebuffers;
+	VkCommandPool commandPool;
+	std::vector<VkCommandBuffer> commandBuffers;
 	VkFormat swapChainImageFormat;
 	VkExtent2D swapChainExtent;
 	VkDebugUtilsMessengerEXT debugMessenger;
@@ -109,6 +111,9 @@ private:
 	void createRenderPass();
 
 	void createFramebuffers();
+
+	void createCommandPool();
+	void createCommandBuffers();
 
 	void cleanup();
 };
