@@ -49,6 +49,9 @@ private:
 	VkExtent2D swapChainExtent;
 	VkDebugUtilsMessengerEXT debugMessenger;
 
+	VkSemaphore imageAvailableSemaphore;
+	VkSemaphore renderFinishedSemaphore;
+
 	const std::vector<const char*> validationLayers =
 	{
 		"VK_LAYER_KHRONOS_validation"
@@ -114,6 +117,10 @@ private:
 
 	void createCommandPool();
 	void createCommandBuffers();
+
+	void createSemaphores();
+
+	void drawFrame();
 
 	void cleanup();
 };
