@@ -1,6 +1,8 @@
 #pragma once
 #include "common.h"
 
+constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphicsFamily;
@@ -49,8 +51,11 @@ private:
 	VkExtent2D swapChainExtent;
 	VkDebugUtilsMessengerEXT debugMessenger;
 
-	VkSemaphore imageAvailableSemaphore;
-	VkSemaphore renderFinishedSemaphore;
+	std::vector<VkSemaphore> imageAvailableSemaphores;
+	std::vector<VkSemaphore> renderFinishedSemaphores;
+	std::vector<VkFence> inFlightFences;
+	std::vector<VkFence> imagesInFlight;
+	size_t currentFrame{0};
 
 	const std::vector<const char*> validationLayers =
 	{
@@ -118,7 +123,7 @@ private:
 	void createCommandPool();
 	void createCommandBuffers();
 
-	void createSemaphores();
+	void createSyncObjects();
 
 	void drawFrame();
 
